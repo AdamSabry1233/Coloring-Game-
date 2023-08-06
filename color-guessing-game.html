@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Color Guessing Game</title>
+    </head>
+    <body>
+        <h1>Color Guessing Game</h1>
+        <button type="button" onclick="runGame()">Start Game</button>
+
+        <script>
+const COLORS_ARRAY = ['blue', 'cyan', 'gold', 'gray', 'green', 'magenta', 'orange', 'red', 'white', 'yellow'];
+
+function runGame() {
+  let guess = '';
+  let correct = false;
+  let numTries = 0;
+
+  const maxIndex = COLORS_ARRAY.length - 1;
+  const targetIndex = Math.floor(Math.random() * (maxIndex + 1));
+  const target = COLORS_ARRAY[targetIndex];
+
+  console.log('Target Color:', target);
+
+  // Custom comparison function to handle alphabetical order
+  function compareAlphabetically(color1, color2) {
+    return color1.localeCompare(color2, 'en', { sensitivity: 'base' });
+  }
+
+  do {
+    guess = prompt('I am thinking of one of these colors:\n\n' + COLORS_ARRAY.join(', ') + '\n\nWhat color am I thinking of?\n');
+    if (guess === null) {
+      alert('Goodbye, you ended the game.');
+      return;
+    }
+    guess = guess.toLowerCase();
+
+    if (!COLORS_ARRAY.includes(guess)) {
+      alert('Invalid color! Please guess a color from the list once again.');
+    } else {
+      correct = checkGuess(guess, target);
+      if (!correct) {
+        const comparisonResult = compareAlphabetically(guess, target);
+        if (comparisonResult > 0) {
+          alert('Hint: Your color is alphabetically lower than the one you just chose.');
+        } else if (comparisonResult < 0) {
+          alert('Hint: Your color is alphabetically higher than the one you just chose.');
+        }
+      }
+    }
+    numTries += 1;
+  } while (!correct);
+
+  alert('Congratulations, you have guessed the color!\n\nIt took you ' + numTries + ' tries to guess it correctly.');
+  document.body.style.background = guess;
+}
+
+function checkGuess(guess, target) {
+  return guess.toLowerCase() === target.toLowerCase();
+}
+
+
+
+        </script>
+    </body>
+</html>
